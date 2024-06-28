@@ -1,0 +1,10 @@
+[Unit]
+Description=Java Spring Boot Application
+After=network.target
+
+[Service]
+User=abdelhafidraoufpfe
+ExecStart=/opt/jdk-21.0.3/bin/java -jar -Dserver.port=1883 /home/abdelhafidraoufpfe/deploy-back/build/libs/pilot-0.0.1-SNAPSHOT.jar
+
+[Install]
+WantedBy=multi-user.target

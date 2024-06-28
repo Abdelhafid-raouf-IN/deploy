@@ -1,0 +1,56 @@
+  GNU nano 4.8                                                                                                                    playbook.yml                                                                                                                               
+    - name: Install git
+      apt:
+        name: git
+        state: present
+
+    - name: Check Java version
+      command: /opt/jdk-21.0.3/bin/java -version
+      register: java_version_output
+
+    - name: Clone repository
+      git:
+        repo: https://github.com/Abdelhafid-raouf-IN/deploy-back.git
+        dest: /home/abdelhafidraoufpfe/deploy-back
+        version: main
+        force: yes
+      register: git_clone
+
+    - name: Ensure gradlew is executable
+      file:
+        path: /home/abdelhafidraoufpfe/deploy-back/gradlew
+        mode: '0755'
+
+    - name: Build the Spring Boot application
+      command: ./gradlew build
+      args:
+        chdir: /home/abdelhafidraoufpfe/deploy-back
+      environment:
+        JAVA_HOME: /opt/jdk-21.0.3
+      register: build_result
+
+    - name: Stop currently running Spring Boot application (if already running)
+      systemd:
+        name: pilot.service
+        state: stopped
+      ignore_errors: yes
+
+    - name: Configure systemd service for Spring Boot application
+      systemd:
+        state: restarted
+        name: pilot.service
+        enabled: yes
+        daemon_reload: yes
+        no_block: yes
+      become: true
+      when: build_result is success
+
+    - name: Check if Spring Boot application is running
+      uri:
+        url: http://localhost:1883/api/auth/status
+        method: GET
+        status_code: 200
+      register: health_check
+      retries: 5
+      delay: 10
+      until: health_check.status == 200
