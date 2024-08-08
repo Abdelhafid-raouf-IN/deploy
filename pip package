@@ -1,6 +1,8 @@
 command Install package json : pip install simplejson
 command Install package requests : pip install requests
 command Install package os :pip install os-sys
+command Install package psycopg2 :pip install psycopg2
+
 
 
 venv environemnt : & "c:/Users/RAOUF Abdelhafid/Desktop/swagger/.venv/Scripts/Activate.ps1" 
