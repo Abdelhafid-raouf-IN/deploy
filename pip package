@@ -1,0 +1,7 @@
+command Install package json : pip install simplejson
+command Install package requests : pip install requests
+command Install package os :pip install os-sys
+
+
+venv environemnt : & "c:/Users/RAOUF Abdelhafid/Desktop/swagger/.venv/Scripts/Activate.ps1" 
+demmarage du projet python : & "c:/Users/RAOUF Abdelhafid/Desktop/swagger/.venv/Scripts/python.exe" "c:/Users/RAOUF Abdelhafid/Desktop/swagger/genrationScenario.py"
